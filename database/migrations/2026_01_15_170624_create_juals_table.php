@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jual', function (Blueprint $table) {
+        Schema::create('juals', function (Blueprint $table) {
             $table->id();
             $table->string('no_bon')->unique();
-            $table->foreignId('kasir_id')->constrained('kasir')->onDelete('cascade');
+            $table->foreignId('kasir_id')->constrained('kasirs')->onDelete('cascade');
             $table->decimal('total', 12, 2);
             $table->decimal('discount', 12, 2)->default(0);
             $table->decimal('bayar', 12, 2);
             $table->decimal('kembali', 12, 2);
+            $table->dateTime('tanggal')->default(now());
+            $table->time('waktu')->default(now());
             $table->timestamps();
         });
     }
