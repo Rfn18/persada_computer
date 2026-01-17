@@ -14,6 +14,10 @@ class BarangController extends Controller
     {
         $data = Barang::all();
 
+        if (! $data) {
+            return new ApiResource(false, 'Data Barang Kosong', null);
+        }
+
         return new ApiResource(true, 'List Data Barang', $data);
     }
 
@@ -52,6 +56,10 @@ class BarangController extends Controller
     {
         $barang = Barang::find($id);
 
+        if (! $barang) {
+            return new ApiResource(false, 'Barang tidak ditemukan', null);
+        }
+
         return new ApiResource(true, 'Barang bedasarkan id', $barang);
     }
 
@@ -69,6 +77,10 @@ class BarangController extends Controller
 
         $barang = Barang::find($id);
 
+        if (! $barang) {
+            return new ApiResource(false, 'Barang tidak ditemukan', null);
+        }
+
         $barang->update([
             'kd_barang' => $barang->kd_barang,
             'nama_barang' => $request->nama_barang ?? $barang->nama_barang,
@@ -80,6 +92,10 @@ class BarangController extends Controller
 
     public function destroy($id)
     {
+        if (! Barang::find($id)) {
+            return new ApiResource(false, 'Barang tidak ditemukan', null);
+        }
+
         Barang::destroy($id);
 
         return new ApiResource(true, 'Berhasil hapus barang', null);

@@ -7,13 +7,16 @@ use App\Http\Resources\ApiResource;
 use App\Models\Kasir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class KasirController extends Controller
 {
     public function index()
     {
         $data = Kasir::all();
+
+        if (! $data) {
+            return new ApiResource(false, 'Data Kasir Kosong', null);
+        }
 
         return new ApiResource(true, 'List Data Kasir', $data);
     }
@@ -29,7 +32,7 @@ class KasirController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-      $lastKasir = Kasir::orderBy('id', 'desc')->first();
+        $lastKasir = Kasir::orderBy('id', 'desc')->first();
 
         if ($lastKasir && $lastKasir->kd_kasir) {
             $lastNumber = (int) substr($lastKasir->kd_kasir, 4);
@@ -51,6 +54,10 @@ class KasirController extends Controller
     {
         $kasir = Kasir::find($id);
 
+        if (! $kasir) {
+            return new ApiResource(false, 'Kasir tidak ditemukan', null);
+        }
+
         return new ApiResource(true, 'Kasir bedasarkan id', $kasir);
     }
 
@@ -67,6 +74,10 @@ class KasirController extends Controller
 
         $kasir = Kasir::find($id);
 
+        if (! $kasir) {
+            return new ApiResource(false, 'Kasir tidak ditemukan', null);
+        }
+
         $kasir->update([
             'kd_kasir' => $kasir->kd_kasir,
             'nama_kasir' => $request->nama_kasir ?? $kasir->nama_kasir,
@@ -77,7 +88,12 @@ class KasirController extends Controller
 
     public function destroy($id)
     {
+        if (!Kasir::find($id)) {
+            return new ApiResource(false, 'Kasir tidak ditemukan', null);
+        }
+
         Kasir::destroy($id);
+
 
         return new ApiResource(true, 'Berhasil hapus kasir', null);
     }

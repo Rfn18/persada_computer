@@ -16,6 +16,10 @@ class JualController extends Controller
     {
         $data = Jual::with('kasir')->get();
 
+        if (! $data) {
+            return new ApiResource(false, 'Data Jual tidak ditemukan', null);
+        }
+
         return new ApiResource(true, 'List Data Jual', $data);
     }
 
@@ -94,6 +98,10 @@ class JualController extends Controller
     public function show($id)
     {
         $jual = Jual::with('kasir')->find($id);
+
+        if (! $jual) {
+            return new ApiResource(false, 'Data Jual tidak ditemukan', null);
+        }
 
         return new ApiResource(true, 'Jual bedasarkan id', $jual);
     }
