@@ -12,7 +12,7 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $data = Barang::all();
+        $data = Barang::paginate(10);
 
         if (! $data) {
             return new ApiResource(false, 'Data Barang Kosong', null);
