@@ -11,7 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.0.1/css/all.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Master Data | set your data</title>
+    <title>Master Data | manage your datas</title>
 </head>
 
 <body>

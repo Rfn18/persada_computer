@@ -15,4 +15,3 @@ Route::post('login', [UserAuthController::class, 'login']);
 Route::post('logout', [UserAuthController::class, 'logout'])
     ->middleware('auth:sanctum');
 
-Route::get('/__no_redirect__', [UserAuthController::class, 'unauthenticated']);
