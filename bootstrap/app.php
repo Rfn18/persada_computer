@@ -12,7 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // $middleware->redirectGuestsTo(function ($request) {
+        // 
+        //     if ($request->is('api/*') || $request->expectsJson()) {
+        //         return url('/api/__no_redirect__');
+        //     }
+
+        //     return route('login');
+        // });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
