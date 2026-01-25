@@ -15,6 +15,26 @@
 </head>
 
 <body class="flex flex-col h-fit items-center p-6 bg-[#fafafa]">
+    <div id="alert-success"
+        class="hidden  fixed bottom-5 animate-[fade-in-left_300ms_ease_forwards] left-5 items-center justify-between text-blue-600 max-w-90 w-full bg-blue-600/10 h-10 shadow">
+        <div class="h-full w-1.5 bg-blue-600"></div>
+        <div class="flex items-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon line">
+                <path style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.95"
+                    d="M11.95 16.5h.1"></path>
+                <path d="M3 12a9 9 0 0 1 9-9h0a9 9 0 0 1 9 9h0a9 9 0 0 1-9 9h0a9 9 0 0 1-9-9m9 0V7"
+                    style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5">
+                </path>
+            </svg>
+            <p class="text-sm ml-2">Success! Your task is fully completed.</p>
+        </div>
+        <button type="button" aria-label="close" class="active:scale-90 transition-all mr-3">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </div>
     <header class="flex flex-col items-center gap-4 mb-6">
         <div
             class="container-logos flex flex-col items-center bg-[#3b82f6] py-4 px-3 rounded-xl hover:scale-105 transition">
@@ -27,7 +47,7 @@
             <h1 class="text-2xl font-bold">Buat Akun Baru</h1>
             <p class="text-gray-500">Mulai kelola bisnis anda hari ini</p>
         </div>
-        <form class="flex flex-col gap-2 m-2">`
+        <form class="flex flex-col gap-2 m-2" onsubmit="registerLoad(event)">
             <label class="text-sm font-medium" for="name">Nama Lengkap</label>
             <div class="nama_lengkap flex border border-gray-200 p-3 rounded mb-2">
                 <i class="fa-regular fa-user mr-2"></i>
@@ -52,7 +72,8 @@
                     placeholder="Masukkan ulang password" id="inp_con_password">
                 <i class="fa-solid fa-eye text-gray-500 cursor-pointer" id="hide_password2"></i>
             </div>
-            <button class="w-full bg-[#3b82f6] hover:bg-[#5c91e8] p-2.5 text-white font-bold rounded cursor-pointer"
+            <button id="btn-submit"
+                class="w-full bg-[#3b82f6] hover:bg-[#5c91e8] p-2.5 text-white font-bold rounded cursor-pointer"
                 type="submit">Daftar</button>
         </form>
         <p class="w-full flex justify-center gap-1 text-sm mt-6 text-gray-500">
@@ -77,34 +98,6 @@
     const inpPw = document.getElementById("inp_password")
     const inpConPw = document.getElementById("inp_con_password")
 
-    // async function registerLoad() {
-    //     const data = {
-    //         name = inpName.value
-    //         email = inpEmail.value
-    //         password = inpPw.value
-    //         password_confirmation = inpConPw.value
-    //     }
-    //     try {
-    //         const response = await fetch('/api/barang', {
-    //             method: "POST",
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(data);
-    //         })
-
-    //         if (!reponse) {
-    //             throw new Error(`HTTP error status: ${response.status}`)
-    //         }
-
-    //         const datas = await response.json()
-    //         console.log(datas)
-    //         return datas
-    //     } catch (error) {
-    //         console.error('Error fetching data', error)
-    //     }
-    // }
-
     let active = false
     hidePw.addEventListener("click", () => {
         active = !active
@@ -122,15 +115,62 @@
     hidePw2.addEventListener("click", () => {
         active2 = !active2
         if (!active2) {
-            inp2.type = "password"
+            inpConPw.type = "password"
             hidePw2.classList.add('fa-eye')
             hidePw2.classList.remove('fa-eye-slash')
         } else {
-            inp2.type = "text"
+            inpConPw.type = "text"
             hidePw2.classList.remove('fa-eye')
             hidePw2.classList.add('fa-eye-slash')
         }
     })
+
+    let loading = false;
+
+    async function registerLoad(e) {
+        e.preventDefault()
+        document.getElementById('btn-submit').innerHTML =
+            '<i class="fa-duotone animate-spin fa-solid fa-loader"></i>'
+        document.getElementById('btn-submit').disabled = true;
+        const data = {
+            name: inpName.value,
+            email: inpEmail.value,
+            password: inpPw.value,
+            password_confirmation: inpConPw.value
+        }
+        try {
+            loading = true
+            const response = await fetch('/api/register', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                credentiala: 'include'
+            })
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+
+            const datas = await response.json()
+
+            document.getElementById('alert-success').classList.remove('hidden')
+            document.getElementById('alert-success').classList.add('flex')
+            setTimeout(() => {
+                window.location = "/login"
+            }, 1000);
+            return datas
+        } catch (error) {
+            console.error('Error fetching data', error)
+            document.getElementById('btn-submit').innerHTML = 'Daftar'
+            document.getElementById('btn-submit').disabled = false
+        } finally {
+            document.getElementById('btn-submit').innerHTML = 'Daftar'
+            document.getElementById('btn-submit').disabled = false;
+        }
+    }
 </script>
 
 </html>

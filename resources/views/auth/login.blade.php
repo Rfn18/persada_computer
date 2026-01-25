@@ -15,6 +15,7 @@
 </head>
 
 <body class="flex flex-col h-fit items-center p-6 bg-[#fafafa]">
+
     <header class="flex flex-col items-center gap-4 mb-6">
         <div
             class="container-logos flex flex-col items-center bg-[#3b82f6] py-4 px-3 rounded-xl hover:scale-105 transition">
@@ -77,6 +78,32 @@
             hidePw.classList.add('fa-eye-slash')
         }
     })
+
+    async function loginLoad() {
+        const data = {
+
+        }
+        try {
+            const response = await fetch('/api/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'aplication/json'
+                },
+                body: JSON.stringify(data),
+                credential: 'include'
+            })
+
+            if (!response.ok) {
+                const res = await response.json()
+                throw res
+            }
+
+            const res = await response.json()
+            return res;
+        } catch (error) {
+            console.error('error fetching data', error)
+        }
+    }
 </script>
 
 </html>
