@@ -14,7 +14,7 @@
     <title>InvoicePos | manage your datas</title>
 </head>
 
-<body class="flex flex-col h-fit items-center p-6">
+<body class="flex flex-col h-fit items-center p-6 bg-[#fafafa]">
     <header class="flex flex-col items-center gap-4 mb-6">
         <div
             class="container-logos flex flex-col items-center bg-[#3b82f6] py-4 px-3 rounded-xl hover:scale-105 transition">
@@ -22,7 +22,7 @@
         </div>
         <h3 class="font-semibold text-xl">InvoicePos</h3>
     </header>
-    <main class="w-[500px] border border-gray-200 py-8 px-6 rounded-2xl">
+    <main class="w-[500px] border border-gray-200 py-8 px-6 rounded-2xl bg-white">
         <div class="head flex flex-col items-center gap-1 mb-6">
             <h1 class="text-2xl font-bold">Masuk Ke Akun</h1>
             <p class="text-gray-500">Kelola transaksi dan invoice anda</p>
@@ -41,8 +41,9 @@
                 </a>
             </div>
             <div class="password flex border border-gray-200 p-3 rounded mb-2">
-                <input class="text-sm outline-0 w-full" type="password" name="password" placeholder="Masukkan password">
-                <i class="fa-solid fa-eye text-gray-500 cursor-pointer"></i>
+                <input class="text-sm outline-0 w-full" type="password" name="password" placeholder="Masukkan password"
+                    id="inp1">
+                <i class="fa-solid fa-eye text-gray-500 cursor-pointer" id="hide-password"></i>
             </div>
 
             <button class="w-full bg-[#3b82f6] hover:bg-[#5c91e8] p-2.5 text-white font-bold rounded cursor-pointer"
@@ -56,8 +57,26 @@
         </p>
     </main>
     <footer class="text-sm mt-6 text-gray-500">
-        © 2024 InvoicePOS. All rights reserved.
+        © 2026 InvoicePOS. All rights reserved.
     </footer>
 </body>
+<script>
+    const hidePw = document.getElementById('hide-password')
+    const inp1 = document.getElementById('inp1')
+
+    let active = false
+    hidePw.addEventListener("click", () => {
+        active = !active
+        if (!active) {
+            inp1.type = "password"
+            hidePw.classList.add('fa-eye')
+            hidePw.classList.remove('fa-eye-slash')
+        } else {
+            inp1.type = "text"
+            hidePw.classList.remove('fa-eye')
+            hidePw.classList.add('fa-eye-slash')
+        }
+    })
+</script>
 
 </html>
